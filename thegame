@@ -1,0 +1,112 @@
+#! python3
+import random
+print('''welcome to camel!
+you are Furiosa. you have stolen a war rig, the "flag ship" of Immortan Joe's fleet of vehicles. with it, you plan to
+smuggle his slave women, his "prized breeders" as he calls them, to the green place. to do so, you must successfully
+cross the dessert. this will not be easy, on top of the heat, the thirst and the extreme amount of stress you put on
+your engines, the war boys are after you. make sure you cover enough ground, stay hydrated and let your engine rest from
+time to time.
+good luck.''')
+
+done = False
+km_traveled = 0
+thirst = 0
+overheat = 0
+opponent = -20
+drinks = random.randrange(2, 6)
+oasis = False
+while not done:
+    print('')
+    print('A. Drink from your canteen.')
+    print('B. Move ahead at moderate speed')
+    print('C. Move ahead at full speed')
+    print('D. Stop and rest for the night')
+    print('E. Status check')
+    print('Q. Quit')
+    player_input = input('what will you do? ').lower()
+# input options:
+    if player_input == 'q' or player_input == 'quit':
+        done = True
+    elif player_input == 'e' or player_input == 'status check':
+        print()
+        print('You have traveled', km_traveled, 'km overall.')
+        print('You have got', drinks, 'drinks in your canteen')
+        print('Your pursuers are', km_traveled - opponent, 'km behind you.')
+    elif player_input == 'd':
+        overheat = 0
+        opponent += random.randrange(7, 15)
+        print()
+        print('The night have passed. your engine is cool now.')
+    elif player_input == 'c':
+        thirst += 1
+        overheat += random.randrange(1, 4)
+        distance = random.randrange(10, 21)
+        km_traveled += distance
+        opponent += random.randrange(7, 15)
+        print()
+        print('You traveled', distance, 'kilometers.')
+    elif player_input == 'b':
+        distance = random.randrange(5, 13)
+        km_traveled += distance
+        overheat += 1
+        thirst += 1
+        opponent += random.randrange(7, 15)
+        print()
+        print('You traveled', distance, 'kilometers.')
+    elif player_input == 'a':
+        if drinks > 0:
+            drinks -= 1
+            thirst = 0
+            print('\nYou are no longer thirsty.')
+        else:
+            print('\nYou can\'t drink since you have no water!')
+    else:
+        print('\nYour input did not register. Please input the letter that represent the choice you want to make.')
+        print('(e.g. A, B, C, D, E or Q to quit.')
+# encounters:
+    # oasis:
+    if random.randrange(20) == 19 and not done:
+        drinks = 5
+        thirst = 0
+        overheat = 0
+        print('\n you found a hidden oasis! you quenched your thirst, filled your canteen and used the cool spring'
+              'water to cool down the war rig engine.')
+        oasis = True
+    # thirst:
+    if 6 >= thirst >= 4 and not done and player_input != 'e' and not oasis:
+        print('\nYour throat is parched from the heat and the dust. you should drink soon.')
+    elif thirst > 6:
+        print('\nThe desert heat has beaten you. you have died of thirst.')
+        done = True
+    # overheating:
+    if 8 >= overheat >= 5 and not done and player_input != 'e' and not oasis:
+        print('\nThe engine of the war rig is getting quite hot. you should rest and let it cool.')
+    elif overheat > 8 and not done:
+        print('\nYou have burnt the engine of the war rig.')
+        print('You leave the, now worthless, piece of rubber and metal behind. The attempt to run from the war boys')
+        print('trackers by foot is futile. You prefer to lie down and let the heat')
+        print('take you. God knows its better than what the Kamakrazee war boys and Immortan joe will do to you.')
+        done = True
+    # the chase:
+    if km_traveled <= opponent and not done:
+        print('Your pursuers have caught up to you! Knowing what lies in the dungeons of the citadel, you decided to go'
+              'out fighting, and God knows you had put on one hell of a fight.')
+        done = True
+    elif 0 < km_traveled - opponent <= 15 and not done and player_input != 'e':
+        print('\nYour pursuers are close! You can almost hear the roars of the engines and the crazed chants of the'
+              ' war boys.')
+# completion:
+    if km_traveled >= 200 and not done:
+        print()
+        print('''you have escaped the heat of the desert! you have reached the green place, and saved the women.
+you can now rest, since you know your sisters will defend you. soon the war boys, the bullet farmers,
+and the army of Gas town will be here. but now, you should rest. your goal as been achieved.''')
+        done = True
+    if random.randrange(20) == 19 and not done:
+        drinks = 5
+        thirst = 0
+        overheat = 0
+        print('\n you found a hidden oasis! you quenched your thirst, filled your canteen and used the cool spring'
+              'water to cool down your engine.')
+    oasis = False
+input('press eny key to exit.')
